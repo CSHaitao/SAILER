@@ -2,7 +2,7 @@
  * @Author: lihaitao
  * @Date: 2023-04-28 14:10:14
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-05-09 22:00:42
+ * @LastEditTime: 2023-05-09 23:23:48
  * @FilePath: /lht/GitHub_code/sailer_old/README.md
 -->
 # SAILER: Structure-aware Pre-trained Language Model for Legal Case Retrieval
@@ -47,16 +47,16 @@ We have uploaded some checkpoints to Huggingface Hub.
 
 | Model              | Description                                               | Link                                                         |
 | ------------------ | --------------------------------------------------------- | ------------------------------------------------------------ |
-| SAILER_zh          | Pre-trianed on Chinese legal case documents                | []    |
-| SAILER_en          | Pre-trianed on English legal case documents                | [] |
-| SAILER_en_finetune | Finetune the SAILER_en on the COLIEE training data | []()                     |
+| SAILER_zh          | Pre-training on Chinese criminal law legal case documents               | [CSHaitao/SAILER_zh](https://huggingface.co/CSHaitao/SAILER_zh)    |
+| SAILER_en          | Pre-trianed on English legal case documents                | [CSHaitao/SAILER_en](https://huggingface.co/CSHaitao/SAILER_en) |
+| SAILER_en_finetune | Finetune the SAILER_en on the COLIEE training data | [CSHaitao/SAILER_en_finetune](https://huggingface.co/CSHaitao/SAILER_en_finetune)                     |
 
 
 You can load them quickly with following codes:
 
 ```
 from transformers import AutoModel
-model = AutoModel.from_pretrained('')
+model = AutoModel.from_pretrained('CSHaitao/SAILER_zh')
 ```
 
 
