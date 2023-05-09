@@ -2,7 +2,7 @@
  * @Author: lihaitao
  * @Date: 2023-04-28 14:10:14
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-05-09 23:23:48
+ * @LastEditTime: 2023-05-09 23:27:36
  * @FilePath: /lht/GitHub_code/sailer_old/README.md
 -->
 # SAILER: Structure-aware Pre-trained Language Model for Legal Case Retrieval
@@ -74,7 +74,7 @@ Before pre-training, you need to process the data into the following form:
 }
 
 ```
-data_example.json provides some examples of training data.
+`data_example.json` provides some examples of training data.
 
 The case law system does may not have relevant articles. We can correspondingly modify `SAILER_Collator` in data.py to implement pre-training.
 
@@ -129,7 +129,6 @@ Before finetuning, you need to process the data into the following form:
 ```
 {'query': TEXT_TYPE, 'positives': List[TEXT_TYPE], 'negatives': List[TEXT_TYPE]}
 ...
-
 ```
 
 ### Train
@@ -150,7 +149,7 @@ python -m dense.driver.train \
   --dataloader_num_workers 2
 ```
 
-More finetune code details can be found in [Dense](https://github.com/luyug/Dense)
+More finetune code details can be found in [Dense](https://github.com/luyug/Dense). Note that we simply modify the `faiss_retriever.retriever`, which may make a slight difference to the results.
 
 ## Evaluation
 
