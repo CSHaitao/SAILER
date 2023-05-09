@@ -1,3 +1,10 @@
+'''
+Author: lihaitao
+Date: 2023-05-09 22:21:34
+LastEditors: Do not edit
+LastEditTime: 2023-05-09 22:21:34
+FilePath: /lht/GitHub_code/sailer_old/src/dense/faiss_retriever/retriever.py
+'''
 import numpy as np
 import faiss
 
@@ -7,13 +14,16 @@ logger = logging.getLogger(__name__)
 
 class BaseFaissIPRetriever:
     def __init__(self, init_reps: np.ndarray):
+        faiss.normalize_L2(init_reps)
         index = faiss.IndexFlatIP(init_reps.shape[1])
         self.index = index
 
     def search(self, q_reps: np.ndarray, k: int):
+        faiss.normalize_L2(q_reps)
         return self.index.search(q_reps, k)
 
     def add(self, p_reps: np.ndarray):
+        faiss.normalize_L2(p_reps)
         self.index.add(p_reps)
 
     def batch_search(self, q_reps: np.ndarray, k: int, batch_size: int):
