@@ -2,7 +2,7 @@
  * @Author: lihaitao
  * @Date: 2023-04-28 14:10:14
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-05-09 23:27:36
+ * @LastEditTime: 2023-05-09 23:41:19
  * @FilePath: /lht/GitHub_code/sailer_old/README.md
 -->
 # SAILER: Structure-aware Pre-trained Language Model for Legal Case Retrieval
@@ -130,7 +130,6 @@ Before finetuning, you need to process the data into the following form:
 {'query': TEXT_TYPE, 'positives': List[TEXT_TYPE], 'negatives': List[TEXT_TYPE]}
 ...
 ```
-
 ### Train
 
 To finetune the dense retriever, call the dense.driver.train module:
@@ -168,7 +167,6 @@ ndcg_cut_10 0.7979
 ndcg_cut_20 0.8190
 ndcg_cut_30 0.8514
 ```
-
 
 ## Citations
 
