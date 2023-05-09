@@ -2,8 +2,8 @@
  * @Author: lihaitao
  * @Date: 2023-04-28 14:10:14
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-05-09 21:24:09
- * @FilePath: /lht/GitHub_code/SAILER/README.md
+ * @LastEditTime: 2023-05-09 22:00:42
+ * @FilePath: /lht/GitHub_code/sailer_old/README.md
 -->
 # SAILER: Structure-aware Pre-trained Language Model for Legal Case Retrieval
 
@@ -66,7 +66,8 @@ model = AutoModel.from_pretrained('')
 
 Before pre-training, you need to process the data into the following form:
 ```
-{   "fact": basic fact,
+{   
+    "fact": basic fact,
     "interpretation": reasoning section, 
     "articles": related criminal law articles,
     "judgment": decision section,
