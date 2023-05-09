@@ -2,7 +2,7 @@
 Author: lihaitao
 Date: 2023-04-28 14:28:04
 LastEditors: Do not edit
-LastEditTime: 2023-05-09 14:40:00
+LastEditTime: 2023-05-09 20:13:55
 FilePath: /lht/GitHub_code/SAILER/src/arguments.py
 '''
 
@@ -128,7 +128,6 @@ class ModelArguments:
 class SAILER_PreTrainingArguments(TrainingArguments):
     warmup_ratio: float = field(default=0.1)
     remove_unused_columns: bool = field(default=False)
-    ##缺很多参数
     local_rank: int = field(default=-1, metadata={"help": "For distributed training: local_rank"})
     fp16: bool = field(
         default=True,

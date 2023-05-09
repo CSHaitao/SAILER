@@ -3,7 +3,7 @@
  # @Author: lihaitao
  # @Date: 2023-04-28 14:32:33
  # @LastEditors: Do not edit
- # @LastEditTime: 2023-04-28 14:33:47
+ # @LastEditTime: 2023-05-09 20:05:43
  # @FilePath: /lht/GitHub_code/SAILER/src/sailer.sh
 ### 
 
@@ -29,8 +29,8 @@ fi
 
 BATCH_SIZE_PER_GPU=36
 GRAD_ACCU=4
-CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python -m torch.distributed.launch \
-  --nproc_per_node 8 \
+CUDA_VISIBLE_DEVICES=0 python -m torch.distributed.launch \
+  --nproc_per_node 1 \
   --master_port 29508 \
   run_pretraining.py \
   --model_name_or_path bert-base-chinese \
@@ -49,12 +49,11 @@ CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python -m torch.distributed.launch \
   --dataloader_num_workers 4 \
   --max_seq_length 512 \
   --num_train_epochs 10 \
-  --train_path ../data/data_example.json \
+  --train_path /data/data_example.json \
   --weight_decay 0.01 \
   --encoder_mask_ratio 0.15 \
   --decoder_mask_ratio 0.45 \
   --use_decoder_head \
   --enable_head_mlm \
   --ddp_find_unused_parameters False \
-  --n_head_layers 1 \
-  |& tee $OUTPUT_DIR/logs/run_pretraining.log
+  --n_head_layers 1 

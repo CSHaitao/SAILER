@@ -36,7 +36,7 @@ from transformers.trainer_utils import is_main_process
 
 import os
 # os.environ["CUDA_VISIBLE_DEVICES"] = '0'
-from modeling import BertForCotMAE
+from modeling import BertForSAILER
 from data import SAILER_Dataset, SAILER_Collator
 from arguments import ModelArguments, DataTrainingArguments, SAILER_PreTrainingArguments as TrainingArguments
 from trainer import TrainerWithLogs as Trainer
@@ -56,17 +56,17 @@ def main():
     parser = HfArgumentParser((ModelArguments, DataTrainingArguments, TrainingArguments))
     if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
         # If we pass only one argument to the script and it's the path to a json file,
-        # let's parse it to get our arguments. 如果是配置文件，那么直接加载配置文件
+        # let's parse it to get our arguments. 
         model_args, data_args, training_args = parser.parse_json_file(json_file=os.path.abspath(sys.argv[1]))
     else:
-        model_args, data_args, training_args = parser.parse_args_into_dataclasses()  ##获得参数
+        model_args, data_args, training_args = parser.parse_args_into_dataclasses()  
 
 
     # Setup logging
     logging.basicConfig(
         format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
         datefmt="%m/%d/%Y %H:%M:%S",
-        handlers=[logging.StreamHandler(sys.stdout)], #将日志消息写入已经打开的类文件对象fileobj
+        handlers=[logging.StreamHandler(sys.stdout)], 
     )
 
     log_level = logging.INFO if is_main_process(training_args.local_rank) else logging.WARN
@@ -95,7 +95,7 @@ def main():
     train_dict = {}
 
     
-    train_dataset = CotMAEDataset(
+    train_dataset = SAILER_Dataset(
     data_args.train_path
     ,data_args)
     eval_dataset = None
@@ -103,11 +103,7 @@ def main():
     # See more about loading any type of standard or custom dataset (from files, python dict, pandas DataFrame, etc) at
     # https://huggingface.co/docs/datasets/loading_datasets.html.
 
-    # Load pretrained model and tokenizer
-    
-    # Distributed training:
-    # The .from_pretrained methods guarantee that only one local process can concurrently
-    # download model & vocab.
+
     if model_args.config_name:
         config = AutoConfig.from_pretrained(model_args.config_name, cache_dir=model_args.cache_dir)
     elif model_args.model_name_or_path:
@@ -132,7 +128,7 @@ def main():
         )
 
     if model_args.model_name_or_path:
-        model = BertForCotMAE.from_pretrained(
+        model = BertForSAILER.from_pretrained(
                     pretrained_model_name_or_path=model_args.model_name_or_path,
                     from_tf=bool(".ckpt" in model_args.model_name_or_path),
                     config=config,
@@ -144,7 +140,7 @@ def main():
                 )
     else:
         logger.warning('Training from scratch.')
-        model = BertForCotMAE.from_config(
+        model = BertForSAILER.from_config(
                         config,
                         use_decoder_head=model_args.use_decoder_head,
                         n_head_layers=model_args.n_head_layers,
@@ -153,32 +149,17 @@ def main():
                     )
 
     model.resize_token_embeddings(len(tokenizer))  ###Pointer to the input tokens Embeddings Module of the model.
-    # ##这句话重新设置了embedding
 
-    # # Data collator  ###这个是重点
-    data_collator = CotMAECollator(
+    # # Data collator 
+    data_collator = SAILER_Collator(
         tokenizer=tokenizer,
         encoder_mask_ratio=data_args.encoder_mask_ratio,
         decoder_mask_ratio=data_args.decoder_mask_ratio,
         max_seq_length=data_args.max_seq_length,
-        data_type=data_args.data_type,
     )
 
-    # sampler = RandomSampler(train_dataset)    
-    # dataloader = DataLoader(dataset=train_dataset,
-    #                             batch_size=1,
-    #                             num_workers=4,
-    #                             collate_fn=data_collator,
-    #                             drop_last=True,
-    #                             sampler=sampler)
-
-    # for step, data in enumerate(dataloader):
-    #     print(data)
-    #     break
-
-
     # Initialize our Trainer
-    trainer = Trainer(  ###确实好用
+    trainer = Trainer( 
         model=model,
         args=training_args,
         train_dataset=train_dataset if training_args.do_train else None,
@@ -189,20 +170,8 @@ def main():
 
     # # Training
     if training_args.do_train:
-        model_path = (
-            model_args.model_name_or_path
-            if (model_args.model_name_or_path is not None and os.path.isdir(model_args.model_name_or_path))
-            else None
-        )
-        # trainer.train(model_path=model_path)
         trainer.train()
-        trainer.save_model()  # Saves the tokenizer too for easy upload   ##保存 只用encoder
-
-
-def _mp_fn(index):
-    # For xla_spawn (TPUs)
-    main()
-
+        trainer.save_model()  
 
 if __name__ == "__main__":
     main()
