@@ -2,7 +2,7 @@
  * @Author: lihaitao
  * @Date: 2023-04-28 14:10:14
  * @LastEditors: Do not edit
- * @LastEditTime: 2023-05-09 23:41:19
+ * @LastEditTime: 2023-05-09 23:42:21
  * @FilePath: /lht/GitHub_code/sailer_old/README.md
 -->
 # SAILER: Structure-aware Pre-trained Language Model for Legal Case Retrieval
@@ -159,7 +159,7 @@ You can run `sh eval.sh` to do a simple evaluation
 trec_eval-9.0.7/trec_eval ../result/qrel.trec ../result/SAILER_LeCaRD -m all_trec
 ```
 
-You will get
+You will get:
 ```
 P_5 0.9084
 recall_5 0.1880
